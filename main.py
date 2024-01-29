@@ -10,7 +10,7 @@ from matplotlib import pyplot, cm
 from mpl_toolkits.mplot3d import Axes3D
 # %matplotlib inline
 
-nx = 10
+nx = 20
 ny = 10
 
 dx = 1. / nx
@@ -21,7 +21,7 @@ y_space = np.linspace(0, 1, ny)
 def analytic_solution(x):
     return (1 / (np.exp(np.pi) - np.exp(-np.pi))) * \
     		np.sin(np.pi * x[0]) * (np.exp(np.pi * x[1]) - np.exp(-np.pi * x[1]))
-surface = np.zeros((ny, nx))
+surface = np.zeros((nx, ny))
 
 for i, x in enumerate(x_space):
     for j, y in enumerate(y_space):
@@ -30,7 +30,7 @@ for i, x in enumerate(x_space):
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 X, Y = np.meshgrid(x_space, y_space)
-surf = ax.plot_surface(X, Y, surface, rstride=1, cstride=1, cmap=cm.viridis,
+surf = ax.plot_surface(X, Y, surface.T, rstride=1, cstride=1, cmap=cm.viridis,
         linewidth=0, antialiased=False)
 
 ax.set_xlim(0, 1)
