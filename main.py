@@ -11,7 +11,7 @@ from mpl_toolkits.mplot3d import Axes3D
 # %matplotlib inline
 
 nx = 20
-ny = 10
+ny = 5
 
 dx = 1. / nx
 dy = 1. / ny
@@ -103,8 +103,8 @@ for i in range(100):
 
     print(i,loss_function(W, x_space, y_space))
 
-surface2 = np.zeros((ny, nx))
-surface = np.zeros((ny, nx))
+surface2 = np.zeros((nx, ny))
+surface = np.zeros((nx, ny))
 
 for i, x in enumerate(x_space):
     for j, y in enumerate(y_space):
@@ -123,7 +123,7 @@ print(surface2[2])
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 X, Y = np.meshgrid(x_space, y_space)
-surf = ax.plot_surface(X, Y, surface, rstride=1, cstride=1, cmap=cm.viridis,
+surf = ax.plot_surface(X, Y, surface.T, rstride=1, cstride=1, cmap=cm.viridis,
         linewidth=0, antialiased=False)
 
 ax.set_xlim(0, 1)
@@ -137,7 +137,7 @@ ax.set_ylabel('$y$');
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 X, Y = np.meshgrid(x_space, y_space)
-surf = ax.plot_surface(X, Y, surface2, rstride=1, cstride=1, cmap=cm.viridis,
+surf = ax.plot_surface(X, Y, surface2.T, rstride=1, cstride=1, cmap=cm.viridis,
         linewidth=0, antialiased=False)
 
 ax.set_xlim(0, 1)
