@@ -12,7 +12,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from visual_PDE import plot_3Dsurface
 
-nx = 20
+nx = 40
 ny = 5
 
 dx = 1. / nx
