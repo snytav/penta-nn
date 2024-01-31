@@ -23,10 +23,10 @@ Lt = ny*0.025
 
 u2D = linear_convection_solve(c,Lx,nx+1,Lt,ny)
 
-dx = 1. / nx
-dy = 1. / ny
-x_space = np.linspace(0, 1, nx)
-y_space = np.linspace(0, 1, ny)
+dx = Lx / nx
+dy = Lt / ny
+x_space = np.linspace(0, Lx, nx)
+y_space = np.linspace(0, Lt, ny)
 
 
 def analytic_solution(x):
@@ -42,11 +42,12 @@ def analytic_solution(x):
 #
 #     return (1 / (np.exp(np.pi) - np.exp(-np.pi))) * \
 #     		np.sin(np.pi * x[0]) * (np.exp(np.pi * x[1]) - np.exp(-np.pi * x[1]))
-# surface = np.zeros((nx, ny))
+surface = np.zeros((nx, ny))
 
 for i, x in enumerate(x_space):
     for j, y in enumerate(y_space):
-        surface[i][j] = analytic_solution([x, y])
+        t = analytic_solution([x, y])
+        surface[i][j] = t
 
 plot_3Dsurface(x_space,y_space,surface.T,'X','Y','Analytical solution')
 # surf = ax.plot_surface(X, Y, surface.T, rstride=1, cstride=1, cmap=cm.viridis,
