@@ -139,8 +139,8 @@ for i in range(100):
     loss_grad =  grad(loss_function)(W, x_space, y_space)
     loss_grad1 =  grad(loss_function1)(W, x_space, y_space)
 
-    W[0] = W[0] - lmb * loss_grad[0]
-    W[1] = W[1] - lmb * loss_grad[1]
+    W[0] = W[0] - lmb * loss_grad1[0]
+    W[1] = W[1] - lmb * loss_grad1[1]
 
     print(i,loss_function(W, x_space, y_space),loss_function1(W, x_space, y_space))
 
