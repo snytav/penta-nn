@@ -84,6 +84,7 @@ def A(x):
 def psy_trial(x, net_out):
     return A(x) + x[0] * (Lx - x[0]) * x[1] * (Lt - x[1]) * net_out
 
+
 def loss_function(W, x, y):
     loss_sum = 0.
 
@@ -136,11 +137,12 @@ print(neural_network(W, np.array([1, 1])))
 
 for i in range(100):
     loss_grad =  grad(loss_function)(W, x_space, y_space)
+    loss_grad1 =  grad(loss_function1)(W, x_space, y_space)
 
     W[0] = W[0] - lmb * loss_grad[0]
     W[1] = W[1] - lmb * loss_grad[1]
 
-    print(i,loss_function(W, x_space, y_space))
+    print(i,loss_function(W, x_space, y_space),loss_function1(W, x_space, y_space))
 
 surface2 = np.zeros((nx, ny))
 surface = np.zeros((nx, ny))
