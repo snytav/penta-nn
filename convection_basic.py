@@ -43,7 +43,7 @@ def linear_convection_solve(c,Lx, nx, Lt, nt):
         for i in range(1, nx):  ## you can try commenting this line and...
             # for i in range(nx): ## ... uncommenting this line and see what happens!
             u[i] = un[i] - c * dt / dx * (un[i] - un[i - 1])
-        u2D[n,:] = u
+            u2D[n,i] = u[i]
         qq = 0
 
     pyplot.plot(numpy.linspace(0, 2, nx), u);

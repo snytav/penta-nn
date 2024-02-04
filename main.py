@@ -21,7 +21,7 @@ ny = 5
 Lt = ny*0.025
 
 
-u2D = linear_convection_solve(c,Lx,nx+1,Lt,ny)
+u,u2D = linear_convection_solve(c,Lx,nx+1,Lt,ny)
 
 dx = Lx / nx
 dy = Lt / ny
@@ -30,10 +30,12 @@ y_space = np.linspace(0, Lt, ny)
 
 
 def analytic_solution(x):
-    ix = int(x[0]/dx)
-    iy = int(x[1] / dy)
-    t = u2D[ix][iy]
-    return t
+    ix = int(np.where(x_space == x[0])[0])
+    iy = int(np.where(y_space == x[1])[0])
+    ansol = u2D[iy][ix]
+    # if not isinstance(t,np.float64):
+    #     qq = 0
+    return ansol
 
 
 
@@ -46,8 +48,8 @@ surface = np.zeros((nx, ny))
 
 for i, x in enumerate(x_space):
     for j, y in enumerate(y_space):
-        t = analytic_solution([x, y])
-        surface[i][j] = t
+        tt = analytic_solution([x, y])
+        surface[i][j] = tt
 
 plot_3Dsurface(x_space,y_space,surface.T,'X','Y','Analytical solution')
 # surf = ax.plot_surface(X, Y, surface.T, rstride=1, cstride=1, cmap=cm.viridis,
@@ -76,14 +78,28 @@ def neural_network_x(x):
     return np.dot(a1, W[1])
 
 def A(x):
-    return x[1] * np.sin(np.pi * x[0])
+    return analytic_solution(x)
 
 
 def psy_trial(x, net_out):
-    return A(x) + x[0] * (1 - x[0]) * x[1] * (1 - x[1]) * net_out
-
+    return A(x) + x[0] * (Lx - x[0]) * x[1] * (Lt - x[1]) * net_out
 
 def loss_function(W, x, y):
+    loss_sum = 0.
+
+    for i_x,xi in enumerate(x):
+        for i_y,yi in enumerate(y):
+
+            input_point = np.array([xi, yi])
+
+            net_out = neural_network(W, input_point)[0]
+            loss_sum += (u2D[i_y][i_x] - net_out)**2
+    return loss_sum
+
+#TODO: check A(x) function that it gives the necessary form of boundary conditions
+#TODO^ check the derivatives and sqr value at each point with the exact value
+#TODO: it cannot be the same value but they must converge with epoch
+def loss_function1(W, x, y):
     loss_sum = 0.
 
     for xi in x:
@@ -100,12 +116,15 @@ def loss_function(W, x, y):
             psy_t_jacobian = jacobian(psy_trial)(input_point, net_out)
             psy_t_hessian = jacobian(jacobian(psy_trial))(input_point, net_out)
 
+            gradient_of_trial_dx = psy_t_jacobian[0]
+            gradient_of_trial_dy = psy_t_jacobian[1]
+
             gradient_of_trial_d2x = psy_t_hessian[0][0]
             gradient_of_trial_d2y = psy_t_hessian[1][1]
 
             func = f(input_point) # right part function
 
-            err_sqr = ((gradient_of_trial_d2x + gradient_of_trial_d2y) - func)**2
+            err_sqr = ((gradient_of_trial_dx + gradient_of_trial_dy) - func)**2
             loss_sum += err_sqr
 
     return loss_sum
