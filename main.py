@@ -131,18 +131,21 @@ def loss_function1(W, x, y):
     return loss_sum
 
 W = [npr.randn(2, 10), npr.randn(10, 1)]
-lmb = 0.001
+lmb = 0.01
 
 print(neural_network(W, np.array([1, 1])))
-
-for i in range(100):
+loss = 1e3
+i = 0
+while loss > 5e-2:
     loss_grad =  grad(loss_function)(W, x_space, y_space)
     loss_grad1 =  grad(loss_function1)(W, x_space, y_space)
 
     W[0] = W[0] - lmb * loss_grad1[0]
     W[1] = W[1] - lmb * loss_grad1[1]
+    loss = loss_function1(W, x_space, y_space)
 
-    print(i,loss_function(W, x_space, y_space),loss_function1(W, x_space, y_space))
+    print(i,loss_function(W, x_space, y_space),loss)
+    i = i + 1
 
 surface2 = np.zeros((nx, ny))
 surface = np.zeros((nx, ny))
