@@ -136,7 +136,7 @@ lmb = 0.01
 print(neural_network(W, np.array([1, 1])))
 loss = 1e3
 i = 0
-while loss > 5e-2:
+while loss > 1e-3:
     loss_grad =  grad(loss_function)(W, x_space, y_space)
     loss_grad1 =  grad(loss_function1)(W, x_space, y_space)
 
