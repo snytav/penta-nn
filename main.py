@@ -68,7 +68,21 @@ def f(x):
 def sigmoid(x):
     return 1. / (1. + np.exp(-x))
 
+nn_first_call = True
+import shutil
+
 def neural_network(W, x):
+    global nn_first_call
+
+    if nn_first_call:
+        np.savetxt('W00.txt', W[0][0], delimiter='\n', fmt='%25.15e')
+        np.savetxt('W01.txt', W[0][1], delimiter='\n', fmt='%25.15e')
+        np.savetxt('W1.txt', W[1], delimiter='\n', fmt='%25.15e')
+        shutil.copy('W00.txt','C:\WORK\PDE\W00.txt')
+        shutil.copy('W01.txt', 'C:\WORK\PDE\W01.txt')
+        shutil.copy('W1.txt', 'C:\WORK\PDE\W1.txt')
+        nn_first_call = False
+
     a1 = sigmoid(np.dot(x, W[0]))
     return np.dot(a1, W[1])
 
